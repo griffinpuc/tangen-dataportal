@@ -1,0 +1,145 @@
+﻿@model Portal.Models.modelPackage;
+@using Portal.Models;
+
+<script src="~/assets/js/jquery.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
+<link href="~/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/Animate.css" rel="stylesheet" />
+<link href="~/assets/css/popup.css" rel="stylesheet" />
+
+<script>
+
+    function AddTag(elem) {
+    var tagID = $(elem).data('assigned-tag');
+    var dataresultID = $(elem).data('assigned-result');
+    $.ajax({
+        url: '@Url.Action("AddTag", "Home")',
+        data: { tagID, dataresultID },
+        success: function (data) {
+            $('#partialview_tags-' + pckg.singularResult.uniqueid).html(data);
+        }
+    });
+    }
+
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+
+</script>
+
+<div class="row" style="margin-top: -2vh; margin-left: 0vw;">
+    <p>Loaded <span style="color: #007bff; font-weight: bolder;"> @Model.dataresults.Count() </span> results</p>
+</div>
+
+<div role="tablist" id="accordion-1">
+    @foreach (modelDataResult result in Model.dataresults)
+    {
+        <div class="row">
+            <div class="col-xs">
+            </div>
+            <div class="col">
+                <div class="card animated fadeInUp" style="border-left: 1.0vh solid #01307E; margin-bottom: 1vh; z-index: 1; position: relative;" onload="UpdateTags(@result)">
+                    <div class="card-header" role="tab">
+
+                        <div class="row" style="margin-left: 0.0vw;">
+                            <h5 class="mb-0">
+                                <a style="font-size: 16pt; color: darkblue" data-toggle="collapse" aria-expanded="true" aria-controls="accordion-1 .item-@result.ID" href="div#accordion-1 .item-@result.ID">
+                                    <span style="color: cornflowerblue; text-decoration: none;">uID: @result.uniqueID</span>
+                                </a>
+                            </h5>
+
+                            <div class="row" style="margin-left: 1%; width: 10vw;">
+                                @{
+                                    if (result.tags != null)
+                                    {
+                                        foreach (modelTag tag in result.tags)
+                                        {
+                                            <div class="col-xs" style="margin: 1%;">
+                                                <i class="fas fa-circle fa-xs" style="color: @tag.color" data-toggle="tooltip" data-placement="top" title="@tag.name"></i>
+                                            </div>
+                                        }
+                                    }
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col">
+                                <h1 style="font-size: 12pt;">@result.assayID</h1>
+                            </div>
+                            <div class="col">
+                                <h1 style="font-size: 12pt; margin-left: 12vw;">Download: @result.downloadDateTime</h1>
+                            </div>
+                            <div class="col-xs">
+                                <div class="btn-group dropup">
+
+                                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-tags"></i>
+                                    </button>
+
+                                    <div class="dropdown-menu" style="z-index: 1; position:relative;">
+                                        <!-- Dropdown menu links -->
+                                        @foreach (modelTag tag in Model.tags)
+                                        {
+                                            int tagID = tag.ID;
+                                            int resultID = result.ID;
+
+                                            <button id="button1" type="button" class="btn-primary dropdown-item" onclick="AddTag(this)" data-assigned-tag="@tagID" data-assigned-result="@resultID"><i class="fas fa-circle fa-xs" style="color: @tag.color"></i> @tag.name</button>
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse item-@result.ID" role="tabpanel" data-parent="#accordion-1">
+                        <div class="card-body">
+                            <div class="row" style="/*text-align: center;*//*display: block;*/">
+                                <div class="col-xl-5" style="margin: auto;">
+                                    <p><span style="color: slategrey; font-size: 13pt;">UUID:</span> @result.instrumentUUID</p>
+                                    <p><span style="color: slategrey; font-size: 13pt;">KIT LOT ID:</span> @result.kitLotID</p>
+                                    <p><span style="color: slategrey; font-size: 13pt;">INSTRUMENT NAME:</span> @result.instrumentName</p>
+                                </div>
+                                <div class="col-xl-5" style="margin: auto;">
+                                    <div class="row" style="margin-left: 15vw;">
+                                        <div class="col">
+                                            <div class="dropdown" style="/*margin: auto;*/margin-bottom: 2vh;">
+                                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Download</button>
+                                                <div class="dropdown-menu" role="menu">
+
+                                                    @using (Html.BeginForm("DownloadHandlerResult", "Home", result))
+                                                    {
+                                                        <form method="POST">
+                                                            <button class="dropdown-item btn-link" role="presentation" type="submit">JSON Results</button>
+                                                        </form>
+                                                    }
+                                                    @using (Html.BeginForm("DownloadHandlerRaw", "Home", result))
+                                                    {
+                                                        <form method="POST">
+                                                            <button class="dropdown-item btn-link" role="presentation" type="submit">Raw Data</button>
+                                                        </form>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-left: 15vw;">
+                                        <div class="col">
+                                            <a class="btn btn-warning" role="presentation" type="submit" href="@Url.Action("ViewResults", "Home", result)" target="_blank">View Results</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+</div>

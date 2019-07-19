@@ -1,0 +1,351 @@
+﻿@model Portal.Models.modelPackage
+@using Portal.Models;
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="~/adminassets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/adminassets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="~/adminassets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="~/adminassets/css/styles.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+    <link href="~/css/Animate.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+</head>
+
+<body style="font-family: 'Ubuntu Mono' , monospace; max-width: 100%; overflow-x: hidden;" onload="Start();">
+
+    <!-- HEADER -->
+    <div class="row animated fadeInDown" style="position: fixed; top: 0; z-index: 1000; background-color: #f8f9fa; height: 12vh; width: 100%; border-bottom: 0.30vh solid #01307E;">
+        <div class="col-xl-6" style="animation-delay: 0.75s;">
+            <img src="~/assets/img/logo.gif?x=@System.DateTime.Now" style="width: 350px;margin-top: 2vh; margin-left: 1vw;">
+        </div>
+        <div class="col-xl-6 animated fadeInDown" style="animation-delay: 0.75s;">
+            <div class="dropdown">
+                @using (Html.BeginForm("Index", "Home"))
+                {
+                    <form method="POST">
+                        <button class="btn btn-dark" type="submit" style="margin-top: 3vh; margin-left:35vw;">Return Home</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 15vh;">
+
+        <!-- INSTRUMENTS -->
+        <div class="col-xl-6">
+            <div class="row animated fadeInLeft">
+                <div class="col">
+                    <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                        <div class="row">
+                            <div class="col" style="color: rgb(65,106,254);">
+                                <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-feed"></i>&nbsp; &nbsp;INSTRUMENT MANAGEMENT</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+
+                                <script type='text/javascript'>
+
+                                    $(document).ready(function(){
+                                        $('[data-toggle="tooltip"]').tooltip();
+                                    });
+
+                                    function Start() {
+                                        UpdateInstruments();
+                                        UpdateUsers();
+                                    }
+
+                                    function UpdateInstruments()
+                                    {
+                                        $.ajax({
+                                            url: '@Url.Action("UpdateInstruments", "Home")',
+                                            success: function (data) {
+                                                $('#partialview_instruments').html(data);
+                                            }
+                                        });
+                                    }
+
+                                    function UpdateUsers()
+                                    {
+                                        $.ajax({
+                                            url: '@Url.Action("UpdateUsers", "Home")',
+                                            success: function (data) {
+                                                $('#partialview_users').html(data);
+                                            }
+                                        });
+                                    }
+
+                                    function UpdateDB()
+                                    {
+                                        $.ajax({
+                                            url: '@Url.Action("updateDatabasePanel", "Home")',
+                                            success: function (data) {
+                                                $('#partialview_DB').html(data);
+                                            }
+                                        });
+                                    }
+
+                                    function AddInstrument()
+                                    {
+                                        var instrumentname = document.getElementById('instrumentname').value
+                                        var instrumentaddress = document.getElementById('instrumentaddress').value
+
+                                        $.ajax({
+                                            url: '@Url.Action("addInstrument", "Home")',
+                                            data: { instrumentname, instrumentaddress },
+                                            success: function (data) {
+                                                $('#partialview_instruments').html(data);
+                                            }
+                                        });
+
+                                            $('#instrumentname').val('');
+                                            $('#instrumentaddress').val('');
+                                    }
+
+
+                                    function AddUser()
+                                    {
+                                        var email = document.getElementById('newemail').value
+                                        var password = document.getElementById('newpassword').value
+
+                                        var sysadmin;
+
+                                        if (document.getElementById('sysadminbool').checked) {
+                                            sysadmin = true;
+                                        }
+                                        else {
+                                            sysadmin = false;
+                                        }
+
+                                        $.ajax({
+                                            url: '@Url.Action("addUser", "Home")',
+                                            data: { email, password, sysadmin },
+                                            success: function (data) {
+                                                $('#partialview_users').html(data);
+                                            }
+                                        });
+
+                                            $('#newemail').val('');
+                                            $('#newpassword').val('');
+                                    }
+
+                                    window.setInterval(function () {
+                                        UpdateInstruments();
+                                        UpdateUsers();
+                                        UpdateDB();
+                                    }, 2000);
+
+                                </script>
+
+                                <div class="table-responsive" style="border-spacing: 2%; padding: -10px;">
+
+                                    <div id="partialview_instruments">
+
+                                        <!-- Instruments content here -->
+
+                                    </div>
+                                </div>
+
+                                <br />
+
+                                <div class="row" style="border-color: #01307E; margin-bottom: -5vh;">
+                                    <div class="col">
+                                        <input placeholder="Instrument address" class="form-control" id="instrumentaddress" />
+                                    </div>
+
+                                    <div class="col">
+                                        <input placeholder="Instrument name" class="form-control" id="instrumentname" />
+                                    </div>
+
+                                    <div class="col">
+                                        <button class="btn btn-primary" style="width: 10vw;" onclick="AddInstrument()">Add</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xl-6 animated fadeInDown">
+
+            @if (Model.issys)
+            {
+                <!-- USERS -->
+                <div class="row">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                            <div class="row">
+                                <div class="col">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-users"></i>&nbsp; &nbsp;ACCESS MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <div id="partialview_users">
+                                            <!-- Partial view contents -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-color: #01307E; margin-bottom: -5vh; margin-top: 5vh;">
+                                <div class="col">
+                                    <input placeholder="Email" class="form-control" id="newemail" />
+                                </div>
+
+                                <div class="col">
+                                    <input placeholder="Password" class="form-control" id="newpassword" type="password" autocomplete="new-password" />
+                                </div>
+
+                                <div class="col">
+                                    <div style="margin-top: 1vh;">
+                                        <label class="checkbox-inline"><input type="checkbox" value="" id="sysadminbool"> Sysadmin</label>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <button class="btn btn-primary" style="width: 10vw;" onclick="AddUser()">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DATABASE -->
+                <div class="row animated fadeInRight">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                            <div class="row">
+                                <div class="col">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-database"></i>&nbsp; &nbsp;DATABASE MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" id="partialview_DB" style="text-align: center;">
+                                    <!-- Partial view contents -->
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">?</span> <span style="font-weight: bolder;">dataresults</span> in database</h6>
+                                            <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">?/?</span> <span style="font-weight: bolder;">trackers</span> in database</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-color: #01307E; margin-bottom: -5vh; margin-top: 5vh;">
+                                <div class="col">
+                                    <button class="btn btn-outline-dark" style="width: 10vw;" onclick="AddUser()">View</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-outline-danger" style="width: 10vw;" onclick="AddUser()">Edit Settings</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- USERS NONSYSADMIN -->
+                <div class="row noselect" style="pointer-events: none;">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #6682B1;">
+                            <div class="row">
+                                <div class="col">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #6682B1;"><i class="fa fa-users"></i>&nbsp; &nbsp;ACCESS MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row" style="filter: blur(2px)">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <div id="partialview_users">
+                                            <!-- Partial view contents -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-color: #01307E; margin-bottom: -5vh; margin-top: 5vh; filter: blur(2px);">
+                                <div class="col">
+                                    <input placeholder="Email" class="form-control" id="newemail" />
+                                </div>
+
+                                <div class="col">
+                                    <input placeholder="Password" class="form-control" id="newpassword" type="password" autocomplete="new-password" />
+                                </div>
+
+                                <div class="col">
+                                    <div style="margin-top: 1vh;">
+                                        <label class="checkbox-inline"><input type="checkbox" value="" id="sysadminbool"> Sysadmin</label>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <button class="btn btn-primary" style="width: 10vw;" onclick="AddUser()">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DATABASE -->
+                <div class="row animated fadeInRight noselect" style="pointer-events: none;">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #6682B1;">
+                            <div class="row">
+                                <div class="col">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #6682B1;"><i class="fa fa-database"></i>&nbsp; &nbsp;DATABASE MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row" style="filter: blur(2px);">
+                                <div class="col" id="partialview_DB" style="text-align: center;">
+                                    <!-- Partial view contents -->
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">?</span> <span style="font-weight: bolder;">dataresults</span> in database</h6>
+                                            <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">?/?</span> <span style="font-weight: bolder;">trackers</span> in database</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-color: #01307E; margin-bottom: -5vh; margin-top: 5vh; filter: blur(2px);">
+                                <div class="col">
+                                    <button class="btn btn-outline-dark" style="width: 10vw;" onclick="AddUser()">View</button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-outline-danger" style="width: 10vw;" onclick="AddUser()">Edit Settings</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+
+    </div>
+
+    <div class="row" style="height: 8vh;">
+        <div class="col" style="text-align: center; margin-top: auto; margin-bottom: auto;">
+            Copyright <i class="fa fa-copyright fa-xs" aria-hidden="true"></i> Tangen Biosciences 2019 - <span><a href="/home/index">Refresh</a> - <a href="http://tangenbio.com/">Main</a></span>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+
+
+</body>
+
+</html>

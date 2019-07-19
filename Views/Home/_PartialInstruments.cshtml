@@ -1,0 +1,65 @@
+﻿@model Portal.Models.modelPackage
+@using Portal.Models;
+
+<link href="~/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+<body>
+
+    <script>
+
+        function RemoveInstrument(elem)
+        {
+            var instrumentID = elem;
+            //var instrumentID = $(elem).data('assigned-ID');
+            $.ajax({
+                url: '@Url.Action("removeInstrument", "Home")',
+                data: { instrumentID }
+            });
+        }
+
+    </script>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>ADDRESS</th>
+                <th>NAME</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (modelInstruments instrument in Model.instruments)
+            {
+
+                if (!instrument.status.Equals("OFFLINE"))
+                {
+                    <tr>
+                        <td>&nbsp;&nbsp;<i class="fas fa-hdd"></i></td>
+                        <td>&nbsp; &nbsp;@instrument.localAddress</td>
+                        <td>@instrument.name</td>
+                        <td style="color: #007bff;">&nbsp; &nbsp;<i class="fa fa-check"></i>&nbsp; @instrument.status</td>
+                        <td>
+                            <div class="btn-group" role="group"></div><button class="btn btn-outline-dark" type="button" onclick="RemoveInstrument(@instrument.ID)">Remove</button>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr style="color: grey;">
+                        <td>&nbsp;&nbsp;<i class="fas fa-hdd"></i></td>
+                        <td>&nbsp; &nbsp;@instrument.localAddress</td>
+                        <td>@instrument.name</td>
+                        <td style="color: #fd7e14;font-weight: bold;font-style: normal;">&nbsp; &nbsp;<i class="fa fa-warning"></i>&nbsp; @instrument.status</td>
+                        <td>
+                            <div class="btn-group" role="group"></div><button class="btn btn-outline-dark" type="button" onclick="RemoveInstrument(@instrument.ID)">Remove</button>
+                        </td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+
+</body>

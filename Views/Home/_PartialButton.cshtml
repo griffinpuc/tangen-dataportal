@@ -1,0 +1,16 @@
+﻿@model int
+@using Portal.Models;
+
+<script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
+<link href="~/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/Animate.css" rel="stylesheet" />
+
+
+@if (Model > 0)
+{
+    <div class="animated pulse"><i class="fas fa-exclamation-triangle" style="color: #FE6505"></i> New files: <span style="color: #ffc107; font-weight: bolder;">@Model</span></div>
+}
+else
+{
+    <div class=""><i class="far fa-check-circle" style="color: #adb5bd"></i> Up to date! </div>
+}

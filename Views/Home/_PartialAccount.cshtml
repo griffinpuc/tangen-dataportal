@@ -1,0 +1,54 @@
+﻿@model Portal.Models.modelPackage
+@using Portal.Models;
+
+<link href="~/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+<script>
+
+        function RemoveUser(elem)
+        {
+            var userID = elem;
+            //var instrumentID = $(elem).data('assigned-ID');
+            $.ajax({
+                url: '@Url.Action("removeUser", "Home")',
+                data: { userID }
+            });
+        }
+
+</script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>USER</th>
+            <th>LAST LOGIN</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (modelCredentials user in Model.credentials)
+        {
+            if (user.sysadmin)
+            {
+                <tr>
+                    <td><i class="fa fa-grav fa-xs" aria-hidden="true"></i> @user.email</td>
+                    <td>@user.lastLogin</td>
+                    <td>
+                        <div class="btn-group" role="group"></div><button class="btn btn-outline-dark" type="button" onclick="RemoveUser(@user.ID)">Remove</button>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>@user.email</td>
+                    <td>@user.lastLogin</td>
+                    <td>
+                        <div class="btn-group" role="group"></div><button class="btn btn-outline-dark" type="button" onclick="RemoveUser(@user.ID)">Remove</button>
+                    </td>
+                </tr>
+            }
+
+        }
+
+    </tbody>
+</table>

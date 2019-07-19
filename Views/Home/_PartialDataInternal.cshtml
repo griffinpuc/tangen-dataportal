@@ -1,0 +1,83 @@
+﻿@model X.PagedList.IPagedList<modelDataResult>;
+@using Portal.Models;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using System.Web;
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <div role="tablist" id="accordion-1">
+        <div id="contentArea">
+            @foreach (modelDataResult result in Model)
+            {
+
+                <div class="card animated fadeInUp" style="border-left: 1.5vh solid #01307E; margin-bottom: 1vh;">
+                    <div class="card-header" role="tab">
+
+                        <h5 class="mb-0">
+                            <a style="font-size: 16pt; color: darkblue" data-toggle="collapse" aria-expanded="true" aria-controls="accordion-1 .item-@result.ID" href="div#accordion-1 .item-@result.ID">
+                                <span style="color: cornflowerblue; text-decoration: none;">CANDIDA: @result.sampleID</span>
+                            </a>
+                        </h5>
+
+                        <div class="row">
+                            <div class="col">
+                                <h1 style="font-size: 12pt;">@result.assayID</h1>
+                            </div>
+                            <div class="col">
+                                <h1 style="font-size: 12pt; margin-left: 16vw;">Download: @result.downloadDateTime</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse animated fadeIn item-@result.ID" role="tabpanel" data-parent="#accordion-1">
+                        <div class="card-body">
+                            <div class="row" style="/*text-align: center;*//*display: block;*/">
+                                <div class="col-xl-5" style="margin: auto;">
+                                    <p><span style="color: slategrey; font-size: 13pt;">UUID:</span> @result.instrumentUUID</p>
+                                    <p><span style="color: slategrey; font-size: 13pt;">KIT LOT ID:</span> @result.kitLotID</p>
+                                    <p><span style="color: slategrey; font-size: 13pt;">INSTRUMENT NAME:</span> @result.instrumentName</p>
+                                </div>
+                                <div class="col-xl-5" style="margin: auto;">
+                                    <div class="row" style="margin-left: 15vw;">
+                                        <div class="col">
+                                            <div class="dropdown" style="/*margin: auto;*/margin-bottom: 2vh;">
+                                                <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Download</button>
+                                                <div class="dropdown-menu" role="menu">
+
+                                                    @using (Html.BeginForm("DownloadHandlerResult", "Home", result))
+                                                    {
+                                                        <form method="POST">
+                                                            <button class="dropdown-item btn-link" role="presentation" type="submit">JSON Results</button>
+                                                        </form>
+                                                    }
+                                                    @using (Html.BeginForm("DownloadHandlerRaw", "Home", result))
+                                                    {
+                                                        <form method="POST">
+                                                            <button class="dropdown-item btn-link" role="presentation" type="submit">Raw Data</button>
+                                                        </form>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-left: 15vw;">
+                                        <div class="col">
+                                            <a class="btn btn-warning" role="presentation" type="submit" href="@Url.Action("ViewResults", "Home", result)" target="_blank">View Results</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+
+</body>
+</html>

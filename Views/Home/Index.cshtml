@@ -1,0 +1,274 @@
+﻿@using Portal.Models;
+@model Portal.Models.modelPackage;
+<!DOCTYPE html>
+<html style="overflow-y: scroll;" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Tangen Data Portal</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+    <link href="~/css/Animate.css" rel="stylesheet" />
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/styles.css">
+
+
+</head>
+
+<body style="font-family: 'Ubuntu Mono', monospace;" onload="Startup()">
+
+    <!-- --------------- -->
+    <!-- Header Contents -->
+    <!-- --------------- -->
+
+    <div class="col" style="margin-bottom: 10vh;">
+        <div class="row animated fadeInDown" style="position: fixed; top: 0; z-index: 1000; background-color: #f8f9fa; height: 12vh; width: 100%; border-bottom: 0.30vh solid #01307E;">
+            <div class="col-xl-6" style="animation-delay: 0.50s;">
+                <img src="~/assets/img/logo.gif?x=@System.DateTime.Now" style="width: 350px;margin-top: 2vh;">
+            </div>
+            <div class="col-xl-6">
+
+                <!-- Admin portal dropdown -->
+                <div class="dropdown">
+
+                    <!-- Admin portal button -->
+                    <button class="btn btn-dark dropdown-toggle animated fadeInDown" data-toggle="dropdown" aria-expanded="false"
+                            type="button" style="margin-top: 3vh; margin-left:35vw; animation-delay: 0.50s;">
+                        Admin Access
+                    </button>
+
+                    <!-- Admin login contents -->
+                    <div class="dropdown-menu dropdown-menu-right" style="background-color: ghostwhite; position:relative">
+                        @using (Html.BeginForm("LoginHandler", "Home", FormMethod.Post))
+                        {
+
+                            <form asp-controller="home" asp-action="loginhandler" class="px-4 py-3" method="POST">
+
+                                <div style="padding: 1vh;">
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email" placeholder="name@tangenbio.com">
+                                            </div>
+
+                                        </div>
+                                        <div class="col">
+
+                                            <div class="form-group">
+                                                <label for="password">Password</label>
+                                                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Sign in</button>
+                                </div>
+
+                            </form>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="animated fadeInLeft" style="box-shadow: 9px 9px 8px #888888; margin-top: 11vh; position: fixed; background-color: #f8f9fa; border-right: .75vh solid #FE6505; width: 11vw; border-radius: 10px; height: 15vh; margin-left: -1.5vw;">
+            <div style="text-align: center; margin-top: 2vh;">
+                <i class="fas fa-signal fa-xs" style="color: #007bff"></i> Status:
+                <div id="partialview_instruments">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <br />
+
+
+    <!-- ------------- -->
+    <!-- Main Contents -->
+    <!-- ------------- -->
+
+    <div style="margin-top: 5vh;">
+        <div class="container"
+             style="display: block;margin-left: auto;margin-right: auto;width: 80vw;margin-top: 5vh;">
+            <div class="">
+                <div class="row" style="margin-bottom: 4vh; text-align: center;">
+
+                        <!-- Scripts for partial views (move to JS files eventually...) -->
+                        <script>
+
+
+                            function UpdateButton() {
+                            $.ajax({
+                            url: '@Url.Action("UpdateButton", "Home")',
+                            success: function (data) {
+                            $('#partialview_button').html(data);
+                            }
+                            });
+                            }
+
+                            function UpdateConnections() {
+                            $.ajax({
+                            url: '@Url.Action("UpdateConnections", "Home")',
+                            success: function (data) {
+                            $('#partialview_instruments').html(data);
+                            }
+                            });
+                            }
+
+                            function UpdateModel() {
+                            $.ajax({
+                            url: '@Url.Action("UpdateModel", "Home")',
+                            success: function (data) {
+                            $('#partialview_data').html(data);
+                            }
+                            });
+                            }
+
+                            function LoadMore() {
+                            $.ajax({
+                            url: '@Url.Action("LoadMore", "Home")',
+                            success: function (data) {
+                            $('#partialview_data').html(data);
+                            }
+                            });
+                            }
+
+                            function AddNewTag() {
+                            var name = document.getElementById('newtagfield').value
+                            $.ajax({
+                            url: '@Url.Action("AddNewTag", "Home")',
+                            data: { name },
+                            success: function (data) {
+                            $('#partialview_drop').html(data);
+                            }
+                            });
+                            }
+
+                            function UpdateTags() {
+                            $.ajax({
+                            url: '@Url.Action("UpdateTags", "Home")',
+                            success: function (data) {
+                            $('#partialview_drop').html(data);
+                            }
+                            });
+                            }
+
+                            function UpdateFromSearch() {
+                            var term = document.getElementById('searchbar').value
+                            $.ajax({
+                            url: '@Url.Action("UpdateFromSearch", "Home")',
+                            data: { term },
+                            success: function (data) {
+                            $('#partialview_data').html(data);
+                            }
+                            });
+                            UpdateButton();
+                            }
+
+                            $(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                            })
+
+                            function Startup() {
+                            UpdateModel();
+                            }
+
+                            window.setInterval(function () {
+                                UpdateConnections();
+                                UpdateButton();
+                            }, 1000);
+
+                        </script>
+
+                </div>
+
+                <div id="parameter-bar" class="animated fadeInRight">
+
+                    <div class="row" style="margin-top: 4vh; margin-bottom: 4vh;">
+                        <div class="btn-group" style="position: relative">
+
+                            <!-- Last refresh time partial view -->
+                            <div class="col">
+                                <div id="partialview_button" style="width: 18vw;" class="btn btn-dark" disabled>
+
+                                    <!-- Partial view contents -->
+                                    <i class="fa fa-check-square-o" style="color: #FE6505"></i>
+                                    New files:
+                                    <span style="color: #ffc107; font-weight: bolder;">0</span>
+
+                                </div>
+                            </div>
+
+                            <!-- Refresh data contents button -->
+                            <div class="col">
+                                <button class="btn btn-outline-dark" onclick="UpdateModel()" style="width: 8vw;">Refresh Data</button>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <!-- Search bar -->
+                        <form class="form-inline active-pink-4" style="width: 50vw; margin-left: 1vw;">
+                            <input class="form-control form-control-sm mr-3 w-75" type="text" aria-label="Search" id="searchbar" oninput="UpdateFromSearch()" placeholder="Search database">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 8vh; z-index: 0; position: relative;">
+
+                <!-- ------------------ -->
+                <!-- Data View Contents -->
+                <!-- ------------------ -->
+
+                <div class="col">
+                    <div id="partialview_data">
+                        <!-- Partial view contents -->
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col" style="text-align: center; margin-bottom: 10vh;">
+                    <div class="col">
+                        <button class="btn btn-link" onclick="LoadMore()" style="width: 8vw;">Load More</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="height: 8vh;">
+                <div class="col" style="text-align: center; margin-top: auto; margin-bottom: auto;">
+                    Copyright <i class="fa fa-copyright fa-xs" aria-hidden="true"></i> Tangen Biosciences 2019 - <span><a href="/home/index">Refresh</a> - <a href="http://tangenbio.com/">Main</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+</html>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

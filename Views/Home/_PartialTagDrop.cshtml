@@ -1,0 +1,11 @@
+﻿@model Portal.Models.modelPackage;
+@using Portal.Models;
+
+<div>
+    @foreach (modelTag tag in Model.tags)
+    {
+    <div class="row">
+        <i class="fas fa-circle fa-xs" style="color: @tag.color" data-toggle="tooltip" data-placement="top"></i> @tag.name
+    </div>
+    }
+</div>
