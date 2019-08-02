@@ -1,24 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\griff\\Documents\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj": {}
+    "C:\\Users\\griff\\Workspace\\TangenBiosciences\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\griff\\Documents\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj": {
-      "version": "1.0.0",
+    "C:\\Users\\griff\\Workspace\\TangenBiosciences\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj": {
+      "version": "0.3.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\griff\\Documents\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj",
+        "projectUniqueName": "C:\\Users\\griff\\Workspace\\TangenBiosciences\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj",
         "projectName": "Portal",
-        "projectPath": "C:\\Users\\griff\\Documents\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj",
+        "projectPath": "C:\\Users\\griff\\Workspace\\TangenBiosciences\\Tangen\\TangenDataPortal\\Portal\\Portal\\Portal.csproj",
         "packagesPath": "C:\\Users\\griff\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\griff\\Documents\\Tangen\\TangenDataPortal\\Portal\\Portal\\obj\\",
+        "outputPath": "C:\\Users\\griff\\Workspace\\TangenBiosciences\\Tangen\\TangenDataPortal\\Portal\\Portal\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\griff\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.1"
@@ -41,9 +43,21 @@
       "frameworks": {
         "netcoreapp2.1": {
           "dependencies": {
+            "Bootstrap.v3.DatetimePicker": {
+              "target": "Package",
+              "version": "[4.17.45, )"
+            },
+            "Bootstrap.v3.Datetimepicker.CSS": {
+              "target": "Package",
+              "version": "[4.17.45, )"
+            },
             "Hangfire": {
               "target": "Package",
               "version": "[1.7.3, )"
+            },
+            "Microsoft.AspNet.SignalR": {
+              "target": "Package",
+              "version": "[2.4.1, )"
             },
             "Microsoft.AspNetCore.App": {
               "suppressParent": "All",

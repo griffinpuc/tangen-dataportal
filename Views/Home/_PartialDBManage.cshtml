@@ -7,10 +7,34 @@
 
 <div class="row">
     <div class="col text-center">
-        <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">@Model.count</span> <span style="font-weight: bolder;">dataresults</span> in database</h6>
-        <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">@Model.counttrack/@Model.count</span> <span style="font-weight: bolder;">trackers</span> in database</h6>
+        <table style="text-align: center; width: 60%; margin-left: auto; margin-right: auto;" align="center">
+            <tr>
+                <th>Table</th>
+                <th>Entries</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>Track</td>
+                <td>@Model.counttrack</td>
+                <td>@Html.ActionLink("View", "ViewDatabaseTrackers", new { controller = "Home" }, new { target = "_blank" })</td>
+            </tr>
+            <tr>
+                <td>Data</td>
+                <td>@Model.count</td>
+                <td>@Html.ActionLink("View", "ViewDatabase", new { controller = "Home" }, new { target = "_blank" })</td>
+            </tr>
+            <tr>
+                <td>Instruments</td>
+                <td>@Model.totalInstruments</td>
+                <td>@Html.ActionLink("View", "ViewDatabaseInstruments", new { controller = "Home" }, new { target = "_blank" })</td>
+            </tr>
+            <tr>
+                <td>Users</td>
+                <td>@Model.countusers</td>
+                <td>@Html.ActionLink("View", "ViewDatabaseUsers", new { controller = "Home" }, new { target = "_blank" })</td>
+            </tr>
+        </table>
     </div>
 </div>
-
 
 </body>

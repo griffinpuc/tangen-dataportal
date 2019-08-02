@@ -1,0 +1,9 @@
+{
+  "version": "1.0.0",
+  "name": "myapp",
+  "private": true,
+  "devDependencies": {},
+  "dependencies": {
+    "xterm": "^3.14.5"
+  }
+}

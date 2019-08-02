@@ -1,0 +1,43 @@
+﻿@model  modelDataResult[]
+@using Portal.Models;
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <style>
+        table tr:nth-child(odd){
+            background-color: lightgrey;
+            color: black;
+        }
+    </style>
+
+    <table style="width:100%; border: 1px solid black; text-align: center;">
+        <tr style="color: cornflowerblue; background-color: dimgrey">
+            <th>ID</th>
+            <th>sampleID</th>
+            <th>uniqueID</th>
+            <th>assayID</th>
+            <th>kitlotID</th>
+            <th>instrumentUUID</th>
+            <th>instrumentName</th>
+        </tr>
+        @foreach (modelDataResult result in Model)
+        {
+            <tr>
+                <td style="font-weight: bolder;">@result.ID</td>
+                <td>@result.sampleID</td>
+                <td>@result.uniqueID</td>
+                <td>@result.assayID</td>
+                <td>@result.kitLotID</td>
+                <td>@result.instrumentUUID</td>
+                <td>@result.instrumentName</td>
+            </tr>
+        }
+
+    </table>
+
+</body>
+</html>

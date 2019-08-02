@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Portal.Models
 {
@@ -18,6 +15,9 @@ namespace Portal.Models
         public string kitLotID { get; set; }
         public string instrumentUUID { get; set; }
         public string instrumentName { get; set; }
+
+        [JsonIgnore]
+        public string rawAddress { get; set; }
 
         [JsonIgnore]
         public ICollection<modelTag> tags { get; set; }

@@ -1,5 +1,6 @@
 ﻿@using Portal.Models;
 @model Portal.Models.modelPackage;
+
 <!DOCTYPE html>
 <html style="overflow-y: scroll;" xmlns="http://www.w3.org/1999/xhtml">
 
@@ -11,27 +12,41 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
     <link href="~/css/Animate.css" rel="stylesheet" />
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+
+    <script href="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/assets/js/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/assets/jquery.validate.js"></script>
+
+
+    <script src="~/assets/pace.min.js"></script>
+    <link href="~/assets/pace2.css" rel="stylesheet" />
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/assets/js/jquery.min.js"></script>
     <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/assets/css/styles.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <link href="~/css/Animate.css" rel="stylesheet" />
+    <link href="~/assets/css/popup.css" rel="stylesheet" />
 
 
 </head>
 
-<body style="font-family: 'Ubuntu Mono', monospace;" onload="Startup()">
+<body style="font-family: 'Ubuntu Mono', monospace; background-color: #fafafa;" onload="Startup()">
 
     <!-- --------------- -->
     <!-- Header Contents -->
     <!-- --------------- -->
 
     <div class="col" style="margin-bottom: 10vh;">
-        <div class="row animated fadeInDown" style="position: fixed; top: 0; z-index: 1000; background-color: #f8f9fa; height: 12vh; width: 100%; border-bottom: 0.30vh solid #01307E;">
+        <div class="row" style="position: fixed; top: 0; z-index: 1000; background-color: #021E4B; height: 12vh; width: 100%; border-bottom: 0.50vh solid #4D6EA4;">
             <div class="col-xl-6" style="animation-delay: 0.50s;">
-                <img src="~/assets/img/logo.gif?x=@System.DateTime.Now" style="width: 350px;margin-top: 2vh;">
+                <img src="~/images/tangenlogo2.png" style="width: 400px;margin-top: 3.5vh;">
             </div>
             <div class="col-xl-6">
 
@@ -39,7 +54,7 @@
                 <div class="dropdown">
 
                     <!-- Admin portal button -->
-                    <button class="btn btn-dark dropdown-toggle animated fadeInDown" data-toggle="dropdown" aria-expanded="false"
+                    <button class="btn btn-light dropdown-toggle animated fadeInDown" data-toggle="dropdown" aria-expanded="false"
                             type="button" style="margin-top: 3vh; margin-left:35vw; animation-delay: 0.50s;">
                         Admin Access
                     </button>
@@ -80,17 +95,7 @@
                 </div>
 
             </div>
-        </div>
-
-        <div class="animated fadeInLeft" style="box-shadow: 9px 9px 8px #888888; margin-top: 11vh; position: fixed; background-color: #f8f9fa; border-right: .75vh solid #FE6505; width: 11vw; border-radius: 10px; height: 15vh; margin-left: -1.5vw;">
-            <div style="text-align: center; margin-top: 2vh;">
-                <i class="fas fa-signal fa-xs" style="color: #007bff"></i> Status:
-                <div id="partialview_instruments">
-
-                </div>
-            </div>
-        </div>
-
+        </div> 
     </div>
 
     <br />
@@ -106,55 +111,62 @@
             <div class="">
                 <div class="row" style="margin-bottom: 4vh; text-align: center;">
 
-                        <!-- Scripts for partial views (move to JS files eventually...) -->
-                        <script>
+                    <!-- Scripts for partial views (move to JS files eventually...) -->
+
+                    <script>
 
 
                             function UpdateButton() {
-                            $.ajax({
-                            url: '@Url.Action("UpdateButton", "Home")',
-                            success: function (data) {
-                            $('#partialview_button').html(data);
-                            }
-                            });
+                                $.ajax({
+                                url: '@Url.Action("UpdateButton", "Home")',
+                                success: function (data) {
+                                $('#partialview_button').html(data);
+                                }
+                                });
                             }
 
                             function UpdateConnections() {
-                            $.ajax({
-                            url: '@Url.Action("UpdateConnections", "Home")',
-                            success: function (data) {
-                            $('#partialview_instruments').html(data);
-                            }
-                            });
+                                $.ajax({
+                                url: '@Url.Action("UpdateConnections", "Home")',
+                                success: function (data) {
+                                $('#partialview_instruments').html(data);
+                                }
+                                });
                             }
 
                             function UpdateModel() {
-                            $.ajax({
-                            url: '@Url.Action("UpdateModel", "Home")',
-                            success: function (data) {
-                            $('#partialview_data').html(data);
-                            }
-                            });
+                                $.ajax({
+                                url: '@Url.Action("UpdateModel", "Home")',
+                                    success: function (data) {
+
+                                        $('#partialview_data').html(data);
+
+                                        document.getElementById("datetext").innerHTML = "All from @System.DateTime.Now.Date";
+                                        const fp = document.querySelector("#datepick1")._flatpickr;
+                                        fp.clear();
+                                        document.getElementById("searchbar").value = "";
+                                    }
+                                });
                             }
 
                             function LoadMore() {
-                            $.ajax({
-                            url: '@Url.Action("LoadMore", "Home")',
-                            success: function (data) {
-                            $('#partialview_data').html(data);
-                            }
-                            });
+                                $.ajax({
+                                url: '@Url.Action("LoadMore", "Home")',
+                                success: function (data) {
+                                $('#partialview_data').html(data);
+                                }
+                                });
                             }
 
                             function AddNewTag() {
-                            var name = document.getElementById('newtagfield').value
-                            $.ajax({
-                            url: '@Url.Action("AddNewTag", "Home")',
-                            data: { name },
-                            success: function (data) {
-                            $('#partialview_drop').html(data);
-                            }
-                            });
+                                var name = document.getElementById('newtagfield').value
+                                $.ajax({
+                                url: '@Url.Action("AddNewTag", "Home")',
+                                data: { name },
+                                success: function (data) {
+                                $('#partialview_drop').html(data);
+                                }
+                                });
                             }
 
                             function UpdateTags() {
@@ -178,12 +190,8 @@
                             UpdateButton();
                             }
 
-                            $(function () {
-                            $('[data-toggle="tooltip"]').tooltip()
-                            })
-
                             function Startup() {
-                            UpdateModel();
+                                UpdateModel();
                             }
 
                             window.setInterval(function () {
@@ -191,13 +199,13 @@
                                 UpdateButton();
                             }, 1000);
 
-                        </script>
+                    </script>
 
                 </div>
 
-                <div id="parameter-bar" class="animated fadeInRight">
+                <div id="parameter-bar">
 
-                    <div class="row" style="margin-top: 4vh; margin-bottom: 4vh;">
+                    <div class="row animated fadeInRight" style="margin-top: 4vh; margin-bottom: 4vh;">
                         <div class="btn-group" style="position: relative">
 
                             <!-- Last refresh time partial view -->
@@ -222,26 +230,103 @@
 
                     </div>
 
-                    <div class="row">
+                    <div class="row animated fadeInRight">
 
                         <!-- Search bar -->
-                        <form class="form-inline active-pink-4" style="width: 50vw; margin-left: 1vw;">
-                            <input class="form-control form-control-sm mr-3 w-75" type="text" aria-label="Search" id="searchbar" oninput="UpdateFromSearch()" placeholder="Search database">
+                        <form class="form-inline active-pink-4 col-sm-5" style="width: 50vw; margin-bottom: 2vh;">
+                            <input class="form-control form-control-sm mr-3 w-75" name="searchbar" type="text" aria-label="Search" id="searchbar" placeholder="Search database">
                             <i class="fas fa-search" aria-hidden="true"></i>
                         </form>
 
+                        <div class="col-sm-1" style="margin-left: -5vw; margin-top: .5vh;">
+
+                            <i id="datepick1" class="fa fa-calendar flatpickr flatpickr-input active" aria-hidden="true"></i>
+
+                            <script>
+
+                                const fp1 = flatpickr("#datepick1", {
+                                    mode: "range",
+                                    dateFormat: "d-m-Y"
+                                });
+
+                                fp1.config.onChange.push(
+                                    function (selectedDates) {
+
+                                        if (selectedDates.length > 1) {
+                                            var dates = String(selectedDates);
+                                            $.ajax({
+                                                url: '@Url.Action("UpdateDates", "Home")',
+                                                data: { dates },
+                                                success: function (data) {
+                                                    $('#partialview_data').html(data);
+                                                    document.getElementById("datetext").innerHTML = (String(String(selectedDates[0]).split(" ").slice(1, 4)).replace(new RegExp(",", "g"), " ") + " to " + String(String(selectedDates[1]).split(" ").slice(1, 4)).replace(new RegExp(",", "g"), " "));
+                                                }
+                                            });
+                                        }
+
+                                    });
+
+                            </script>
+
+                        </div>
+
+                    <div class="col-sm-3" style="margin-left: -3vw; margin-top: .5vh;">
+                        <p id="datetext"> All from @System.DateTime.Now.Date</p>
+
                     </div>
 
+                        <!-- Script for search bar 250ms delay -->
+                        <script>
+
+                            let typingTimer;                //timer identifier
+                            let doneTypingInterval = 250;  //time in ms (5 seconds)
+                            let myInput = document.getElementById('searchbar');
+
+                            //on keyup, start the countdown
+                            myInput.addEventListener('keyup', () => {
+                                clearTimeout(typingTimer);
+                                if (myInput.value) {
+                                    typingTimer = setTimeout(doneTyping, doneTypingInterval);
+                                }
+                            });
+
+                            //user is "finished typing," do something
+                            function doneTyping() {
+                                UpdateFromSearch();
+                            }
+
+                            myInput.addEventListener('keydown', () => {
+                                if (event.keyCode == 8 || event.keyCode == 46) {
+                                    document.getElementById('searchbar').value = "";
+                                    UpdateFromSearch();
+                                }
+                            });
+
+                        </script>
+
+                    </div>
+
+                    <hr />
+
+                    <!-- Info partial -->
+                    <div class="row" style="margin-top: 4vh;">
+                        <div id="partialview_instruments" class="col">
+                            <!-- Partial contents -->
+                            <p class="animated pulse">Instruments connected: <span style="color: #007bff; font-weight: bolder;">x</span>/<span style="color: #007bff; font-weight: bolder;">x</span></p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="row" style="margin-top: 8vh; z-index: 0; position: relative;">
+
+            <div class="row" style="margin-top: 0vh; z-index: 0; position: relative;">
 
                 <!-- ------------------ -->
                 <!-- Data View Contents -->
                 <!-- ------------------ -->
 
                 <div class="col">
+
                     <div id="partialview_data">
                         <!-- Partial view contents -->
                     </div>
@@ -260,7 +345,8 @@
 
             <div class="row" style="height: 8vh;">
                 <div class="col" style="text-align: center; margin-top: auto; margin-bottom: auto;">
-                    Copyright <i class="fa fa-copyright fa-xs" aria-hidden="true"></i> Tangen Biosciences 2019 - <span><a href="/home/index">Refresh</a> - <a href="http://tangenbio.com/">Main</a></span>
+                    Copyright &copy; Tangen Biosciences 2019 - <span><a href="/home/index">Refresh</a> - <a href="http://tangenbio.com/">Main</a></span>
+                    <br />Development Release 0.4.8
                 </div>
             </div>
         </div>
@@ -270,5 +356,3 @@
 
 
 </html>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

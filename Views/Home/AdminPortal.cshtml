@@ -9,29 +9,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Admin Portal</title>
     <link rel="stylesheet" href="~/adminassets/bootstrap/css/bootstrap.min.css">
+    <script src="~/assets/pace.min.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <link href="~/assets/pace2.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/adminassets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="~/adminassets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="~/adminassets/css/styles.css">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
     <link href="~/css/Animate.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    @*<link href="~/xterm/dist/xterm.css" rel="stylesheet" />
+    <script src="~/xterm/dist/xterm.js"></script>*@
+
 
 </head>
 
 <body style="font-family: 'Ubuntu Mono' , monospace; max-width: 100%; overflow-x: hidden;" onload="Start();">
 
     <!-- HEADER -->
-    <div class="row animated fadeInDown" style="position: fixed; top: 0; z-index: 1000; background-color: #f8f9fa; height: 12vh; width: 100%; border-bottom: 0.30vh solid #01307E;">
+    <div class="row" style="position: fixed; top: 0; z-index: 1000; background-color: #021E4B; height: 12vh; width: 100%; border-bottom: 0.50vh solid #4D6EA4;">
         <div class="col-xl-6" style="animation-delay: 0.75s;">
-            <img src="~/assets/img/logo.gif?x=@System.DateTime.Now" style="width: 350px;margin-top: 2vh; margin-left: 1vw;">
+            <img src="~/images/tangenlogo2.png" style="width: 400px; margin-top: 3.5vh; margin-left: 1vw;">
         </div>
         <div class="col-xl-6 animated fadeInDown" style="animation-delay: 0.75s;">
             <div class="dropdown">
                 @using (Html.BeginForm("Index", "Home"))
                 {
                     <form method="POST">
-                        <button class="btn btn-dark" type="submit" style="margin-top: 3vh; margin-left:35vw;">Return Home</button>
+                        <button class="btn btn-light" type="submit" style="margin-top: 3vh; margin-left:35vw;">Return Home</button>
                     </form>
                 }
             </div>
@@ -39,24 +44,402 @@
     </div>
     <div class="row" style="margin-top: 15vh;">
 
-        <!-- INSTRUMENTS -->
-        <div class="col-xl-6">
-            <div class="row animated fadeInLeft">
-                <div class="col">
-                    <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
-                        <div class="row">
-                            <div class="col" style="color: rgb(65,106,254);">
-                                <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-feed"></i>&nbsp; &nbsp;INSTRUMENT MANAGEMENT</p>
+
+        @if (Model.issys)
+        {
+
+            <div class="col-xl-6">
+
+                <!-- INSTRUMENTS -->
+                <div class="row animated fadeInLeft">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                            <div class="row">
+                                <div class="col" style="color: rgb(65,106,254);">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-feed"></i>&nbsp; &nbsp;INSTRUMENT MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+
+                                    <script type='text/javascript'>
+
+                                        function Start() {
+                                            UpdateInstruments();
+                                            UpdateUsers();
+                                        }
+
+                                        function UpdateInstruments()
+                                        {
+                                            $.ajax({
+                                                url: '@Url.Action("UpdateInstruments", "Home")',
+                                                success: function (data) {
+                                                    $('#partialview_instruments').html(data);
+                                                }
+                                            });
+                                        }
+
+                                        function UpdateUsers()
+                                        {
+                                            $.ajax({
+                                                url: '@Url.Action("UpdateUsers", "Home")',
+                                                success: function (data) {
+                                                    $('#partialview_users').html(data);
+                                                }
+                                            });
+                                        }
+
+                                        function UpdateDB()
+                                        {
+                                            $.ajax({
+                                                url: '@Url.Action("updateDatabasePanel", "Home")',
+                                                success: function (data) {
+                                                    $('#partialview_DB').html(data);
+                                                }
+                                            });
+                                        }
+
+                                        @*function UpdateProgress()
+                                        {
+                                            $.ajax({
+                                                url: '@Url.Action("updateProgress", "Home")',
+                                                success: function (data) {
+                                                    $('#partialview_progress').html(data);
+                                                }
+                                            });
+                                        }*@
+
+                                        @*function StartProgress() {
+
+                                          var input = document.getElementById("files");
+                                          var files = input.files;
+                                          var formData = new FormData();
+
+                                          for (var i = 0; i != files.length; i++) {
+                                            formData.append("files", files[i]);
+                                          }
+
+                                            $.ajax({
+                                                url: '@Url.Action("startProgress", "Home")',
+                                                type: 'POST',
+                                                data: formData,
+                                                processData: false,
+                                                contentType: false,
+                                                success: function (result) {
+                                                }
+                                            });
+                                        }*@
+
+                                        function BatchMerge() {
+
+                                          var baseDirectory = document.getElementById("baseDirectoryInput").value;
+                                            if (confirm("Are you sure you would like to perform this action?")) {
+                                                 $.ajax({
+                                                    url: '@Url.Action("batchMerge", "Home")',
+                                                    type: 'POST',
+                                                    data: { baseDirectory },
+                                                    success: function (data) {
+                                                    }
+                                                });
+                                            }
+
+                                        }
+
+                                        function AddInstrument()
+                                        {
+                                            var instrumentname = document.getElementById('instrumentname').value
+                                            var instrumentaddress = document.getElementById('instrumentaddress').value
+
+                                            $.ajax({
+                                                url: '@Url.Action("addInstrument", "Home")',
+                                                data: { instrumentname, instrumentaddress },
+                                                success: function (data) {
+                                                    $('#partialview_instruments').html(data);
+                                                }
+                                            });
+
+                                                $('#instrumentname').val('');
+                                                $('#instrumentaddress').val('');
+                                        }
+
+
+                                        function AddUser()
+                                        {
+                                            var email = document.getElementById('newemail').value
+                                            var password = document.getElementById('newpassword').value
+
+                                            var sysadmin;
+
+                                            if (document.getElementById('sysadminbool').checked) {
+                                                sysadmin = true;
+                                            }
+                                            else {
+                                                sysadmin = false;
+                                            }
+
+                                            $.ajax({
+                                                url: '@Url.Action("addUser", "Home")',
+                                                data: { email, password, sysadmin },
+                                                success: function (data) {
+                                                    $('#partialview_users').html(data);
+                                                }
+                                            });
+
+                                                $('#newemail').val('');
+                                                $('#newpassword').val('');
+                                        }
+
+                                        function clearDatabase()
+                                        {
+                                            if (confirm("Are you sure you would like to clear the database?")) {
+                                              $.ajax({ url: '@Url.Action("clearDatabase", "Home")' });
+                                            }
+                                        }
+
+                                        window.setInterval(function () {
+                                            UpdateInstruments();
+                                            UpdateUsers();
+                                            UpdateDB();
+                                        }, 2000);
+
+                                    </script>
+
+                                    <div class="table-responsive" style="border-spacing: 2%; padding: -10px;">
+
+                                        <div id="partialview_instruments">
+
+                                            <!-- Instruments content here -->
+
+                                        </div>
+                                    </div>
+
+                                    <br />
+
+                                    <div class="row" style="border-color: #01307E; margin-bottom: -5vh;">
+                                        <div class="col">
+                                            <input placeholder="Instrument address" class="form-control" id="instrumentaddress" />
+                                        </div>
+
+                                        <div class="col">
+                                            <input placeholder="Instrument name" class="form-control" id="instrumentname" />
+                                        </div>
+
+                                        <div class="col">
+                                            <button class="btn btn-primary" style="width: 10vw;" onclick="AddInstrument()">Add</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Logging -->
+                <div class="row animated fadeInRight">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                            <div class="row">
+                                <div class="col">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-database"></i>&nbsp; &nbsp;LOGGING</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+
+                                <div class="col">
+
+                                    <div id="terminal" style="font-size: 6pt;"></div>
+
+                                    <script>
+
+                                        //function updateXterm(msg) {
+                                        //    term.writeln(msg);
+                                        //}
+
+                                        //var term = new Terminal();
+                                        //term.open(document.getElementById('terminal'));
+                                        //term.resize(50, 10);
+
+                                        //updateXterm('TDP Process Logging');
+
+                                        try {
+                                            var connection = new signalR.HubConnectionBuilder().withUrl("/logHub").build();
+                                        }
+                                        catch (error) {
+                                            console.error(error);
+                                        }
+
+                                        //connection.on("rm", function (msg) {
+                                        //    updateXterm(msg);
+                                        //});
+
+    
+                                        connection.on("updateprogress", function (amount) {
+                                            document.getElementById("progressbar").value = amount;
+                                        });
+
+                                        connection.start().then(function () {
+                                            }).catch(function (err) {
+                                            return console.error(err.toString());
+                                        });
+
+                                    </script>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xl-6 animated fadeInDown">
+
+                <!-- USERS -->
+                <div class="row">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                            <div class="row">
+                                <div class="col">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-users"></i>&nbsp; &nbsp;ACCESS MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="table-responsive">
+                                        <div id="partialview_users">
+                                            <!-- Partial view contents -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="border-color: #01307E; margin-bottom: -5vh; margin-top: 5vh;">
+                                <div class="col">
+                                    <input placeholder="Email" class="form-control" id="newemail" />
+                                </div>
+
+                                <div class="col">
+                                    <input placeholder="Password" class="form-control" id="newpassword" type="password" autocomplete="new-password" />
+                                </div>
+
+                                <div class="col">
+                                    <div style="margin-top: 1vh;">
+                                        <label class="checkbox-inline"><input type="checkbox" value="" id="sysadminbool"> Sysadmin</label>
+                                    </div>
+                                </div>
+
+                                <div class="col">
+                                    <button class="btn btn-primary" style="width: 10vw;" onclick="AddUser()">Add</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
+                    </div>
+                </div>
 
-                                <script type='text/javascript'>
+                <!-- DATABASE -->
+                <div class="row animated fadeInRight">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                            <div class="row">
+                                <div class="col">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-database"></i>&nbsp; &nbsp;DATABASE MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col" id="partialview_DB" style="text-align: center;">
+                                    <!-- Partial view contents -->
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <table style="text-align: center; width: 60%; margin-left: auto; margin-right: auto;" align="center">
+                                                <tr>
+                                                    <th>Table</th>
+                                                    <th>Entries</th>
+                                                    <th></th>
+                                                </tr>
+                                                <tr>
+                                                    <td>Track</td>
+                                                    <td>@Model.counttrack</td>
+                                                    <td>@Html.ActionLink("View", "ViewDatabaseTrackers", new { controller = "Home" }, new { target = "_blank" })</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Data</td>
+                                                    <td>@Model.count</td>
+                                                    <td>@Html.ActionLink("View", "ViewDatabase", new { controller = "Home" }, new { target = "_blank" })</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Instruments</td>
+                                                    <td>@Model.totalInstruments</td>
+                                                    <td>@Html.ActionLink("View", "ViewDatabaseInstruments", new { controller = "Home" }, new { target = "_blank" })</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Users</td>
+                                                    <td>@Model.countusers</td>
+                                                    <td>@Html.ActionLink("View", "ViewDatabaseUsers", new { controller = "Home" }, new { target = "_blank" })</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                                    $(document).ready(function(){
-                                        $('[data-toggle="tooltip"]').tooltip();
-                                    });
+                            <div class="row" style="margin-top: 8vh;">
+
+
+                                <div class="col" style="text-align: center;">
+                                    <button class="btn btn-primary" style="width: 10vw;" onclick="clearDatabase()">Clear Database</button>
+                                </div>
+
+                            </div>
+
+                            <div class="row" style="margin-top: 8vh;">
+
+                                <div class="col" style="text-align: center;">
+
+                                    <label for="baseDirectoryInput">Merge Existing Data into TDP</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon3">Existing data path:</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="baseDirectoryInput" id="baseDirectoryInput" aria-describedby="basic-addon3">
+                                    </div>
+
+                                    <progress id="progressbar" value="0" max="100" style="width: 40vw;"></progress>
+
+                                    <button class="btn btn-primary" style="width: 20vw; margin-top: 3vh;" onclick="BatchMerge()">Start Merge</button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        }
+
+        else
+        {
+
+            <div class="col-xl-6">
+
+                <div class="row animated fadeInLeft">
+                    <div class="col">
+                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
+                            <div class="row">
+                                <div class="col" style="color: rgb(65,106,254);">
+                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-feed"></i>&nbsp; &nbsp;INSTRUMENT MANAGEMENT</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+
+                                    <script type='text/javascript'>
 
                                     function Start() {
                                         UpdateInstruments();
@@ -143,120 +526,44 @@
                                         UpdateDB();
                                     }, 2000);
 
-                                </script>
+                                    </script>
 
-                                <div class="table-responsive" style="border-spacing: 2%; padding: -10px;">
+                                    <div class="table-responsive" style="border-spacing: 2%; padding: -10px;">
 
-                                    <div id="partialview_instruments">
+                                        <div id="partialview_instruments">
 
-                                        <!-- Instruments content here -->
+                                            <!-- Instruments content here -->
 
+                                        </div>
                                     </div>
+
+                                    <br />
+
+                                    <div class="row" style="border-color: #01307E; margin-bottom: -5vh;">
+                                        <div class="col">
+                                            <input placeholder="Instrument address" class="form-control" id="instrumentaddress" />
+                                        </div>
+
+                                        <div class="col">
+                                            <input placeholder="Instrument name" class="form-control" id="instrumentname" />
+                                        </div>
+
+                                        <div class="col">
+                                            <button class="btn btn-primary" style="width: 10vw;" onclick="AddInstrument()">Add</button>
+                                        </div>
+                                    </div>
+
                                 </div>
-
-                                <br />
-
-                                <div class="row" style="border-color: #01307E; margin-bottom: -5vh;">
-                                    <div class="col">
-                                        <input placeholder="Instrument address" class="form-control" id="instrumentaddress" />
-                                    </div>
-
-                                    <div class="col">
-                                        <input placeholder="Instrument name" class="form-control" id="instrumentname" />
-                                    </div>
-
-                                    <div class="col">
-                                        <button class="btn btn-primary" style="width: 10vw;" onclick="AddInstrument()">Add</button>
-                                    </div>
-                                </div>
-
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
+
             </div>
 
-        </div>
-        <div class="col-xl-6 animated fadeInDown">
+            <div class="col-xl-6 animated fadeInDown">
 
-            @if (Model.issys)
-            {
-                <!-- USERS -->
-                <div class="row">
-                    <div class="col">
-                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
-                            <div class="row">
-                                <div class="col">
-                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-users"></i>&nbsp; &nbsp;ACCESS MANAGEMENT</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="table-responsive">
-                                        <div id="partialview_users">
-                                            <!-- Partial view contents -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="border-color: #01307E; margin-bottom: -5vh; margin-top: 5vh;">
-                                <div class="col">
-                                    <input placeholder="Email" class="form-control" id="newemail" />
-                                </div>
-
-                                <div class="col">
-                                    <input placeholder="Password" class="form-control" id="newpassword" type="password" autocomplete="new-password" />
-                                </div>
-
-                                <div class="col">
-                                    <div style="margin-top: 1vh;">
-                                        <label class="checkbox-inline"><input type="checkbox" value="" id="sysadminbool"> Sysadmin</label>
-                                    </div>
-                                </div>
-
-                                <div class="col">
-                                    <button class="btn btn-primary" style="width: 10vw;" onclick="AddUser()">Add</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- DATABASE -->
-                <div class="row animated fadeInRight">
-                    <div class="col">
-                        <div class="jumbotron" style="margin: 5%;text-align: center;border-left: 1.5vh solid #01307E;">
-                            <div class="row">
-                                <div class="col">
-                                    <p style="margin-top: -5%;margin-bottom: 5vh;font-size: 15pt;color: #01307E;"><i class="fa fa-database"></i>&nbsp; &nbsp;DATABASE MANAGEMENT</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col" id="partialview_DB" style="text-align: center;">
-                                    <!-- Partial view contents -->
-                                    <div class="row">
-                                        <div class="col text-center">
-                                            <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">?</span> <span style="font-weight: bolder;">dataresults</span> in database</h6>
-                                            <h6>Currently <span style="font-weight: bolder; color: #007bff; font-size: 15pt;">?/?</span> <span style="font-weight: bolder;">trackers</span> in database</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" style="border-color: #01307E; margin-bottom: -5vh; margin-top: 5vh;">
-                                <div class="col">
-                                    <button class="btn btn-outline-dark" style="width: 10vw;" onclick="AddUser()">View</button>
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-outline-danger" style="width: 10vw;" onclick="AddUser()">Edit Settings</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-            else
-            {
                 <!-- USERS NONSYSADMIN -->
                 <div class="row noselect" style="pointer-events: none;">
                     <div class="col">
@@ -329,16 +636,20 @@
                         </div>
                     </div>
                 </div>
-            }
+
+            </div>
+
+        }
 
 
-        </div>
+
 
     </div>
 
     <div class="row" style="height: 8vh;">
         <div class="col" style="text-align: center; margin-top: auto; margin-bottom: auto;">
-            Copyright <i class="fa fa-copyright fa-xs" aria-hidden="true"></i> Tangen Biosciences 2019 - <span><a href="/home/index">Refresh</a> - <a href="http://tangenbio.com/">Main</a></span>
+            Copyright &copy; Tangen Biosciences 2019 - <span><a href="/home/index">Refresh</a> - <a href="http://tangenbio.com/">Main</a></span>
+            <br />Development Release 0.4.8
         </div>
     </div>
 
@@ -349,3 +660,12 @@
 </body>
 
 </html>
+
+@*
+TANGEN COLOURS:
+---------------------
+Light Blue: #F2F7FF
+Dark Blue: #021E4B
+Logo Blue: #01307E
+Logo Orange: #FE6505
+*@

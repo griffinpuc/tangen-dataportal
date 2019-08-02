@@ -54,6 +54,8 @@ namespace Portal.Migrations
 
                     b.Property<string>("kitLotID");
 
+                    b.Property<string>("rawAddress");
+
                     b.Property<string>("sampleID");
 
                     b.Property<string>("uniqueID");

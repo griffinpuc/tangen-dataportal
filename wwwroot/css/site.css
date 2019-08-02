@@ -12,6 +12,21 @@ body {
     padding-right: 15px;
 }
 
+svg.ct-chart-bar, svg.ct-chart-line {
+    overflow: visible;
+}
+
+.ct-label.ct-label.ct-horizontal.ct-end {
+    position: relative;
+    justify-content: flex-end;
+    text-align: right;
+    transform-origin: 100% 0;
+    transform: translate(-100%) rotate(-90deg);
+    font-size: 5pt;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;
@@ -95,4 +110,61 @@ body {
     text-decoration: none;
     color: #fff;
     font-size: 0.8em;
+}
+.awesome {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    color: #313131;
+    font-size: 45px;
+    font-weight: bold;
+    position: absolute;
+    font-family: 'Ubuntu Mono', monospace;
+    -webkit-animation: colorchange 20s infinite alternate;
+}
+
+@-webkit-keyframes colorchange {
+    0% {
+        color: blue;
+    }
+
+    10% {
+        color: #8e44ad;
+    }
+
+    20% {
+        color: #1abc9c;
+    }
+
+    30% {
+        color: #d35400;
+    }
+
+    40% {
+        color: blue;
+    }
+
+    50% {
+        color: #34495e;
+    }
+
+    60% {
+        color: blue;
+    }
+
+    70% {
+        color: #2980b9;
+    }
+
+    80% {
+        color: #f1c40f;
+    }
+
+    90% {
+        color: #2980b9;
+    }
+
+    100% {
+        color: pink;
+    }
 }

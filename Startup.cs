@@ -13,9 +13,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Portal.Models;
 using Portal.Models.Logic;
+using Portal.Hubs;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Portal
 {
+
     public class Startup
     {
 
@@ -42,6 +46,7 @@ namespace Portal
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<contextDatabase>();
             services.AddScoped<backgroundTasks>();
+            services.AddSignalR();
 
 
         }
@@ -61,8 +66,6 @@ namespace Portal
 
             GlobalConfiguration.Configuration.UseActivator(new jobActivator(serviceProvider));
 
-            app.UseHangfireServer();
-            app.UseHangfireDashboard();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -74,7 +77,20 @@ namespace Portal
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            BackgroundJob.Schedule<backgroundTasks>(x => x.updateConnections(), TimeSpan.FromMilliseconds(5000));
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<LogHub>("/logHub");
+            });
+
+            app.UseFileServer(new FileServerOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), @"node_modules")),
+                RequestPath = new PathString("/node_modules"),
+                EnableDirectoryBrowsing = true
+            });
+
+            app.UseStaticFiles();
 
         }
     }

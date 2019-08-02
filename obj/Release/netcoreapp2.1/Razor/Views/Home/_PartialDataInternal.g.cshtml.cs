@@ -63,7 +63,7 @@ using System.Web;
             WriteLiteral("\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n");
             EndContext();
             BeginContext(190, 36, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5a830664b3214da8bccd1a6c73855f6c", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("head", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6e5de227e7a94e66a970aa1028f87e5d", async() => {
                 BeginContext(196, 23, true);
                 WriteLiteral("\r\n    <title></title>\r\n");
                 EndContext();
@@ -83,7 +83,7 @@ using System.Web;
             WriteLiteral("\r\n");
             EndContext();
             BeginContext(228, 4508, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "0f9e718da747439391dcf39b51af9f35", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("body", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "aca75a4afbb6491587fa350dcf542f8d", async() => {
                 BeginContext(234, 79, true);
                 WriteLiteral("\r\n\r\n    <div role=\"tablist\" id=\"accordion-1\">\r\n        <div id=\"contentArea\">\r\n");
                 EndContext();

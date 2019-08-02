@@ -1,0 +1,51 @@
+﻿@model  Portal.Models.modelGraph
+@using Portal.Models
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <title>SHOW GRAPH</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <link href="~/css/site.css" rel="stylesheet" />
+
+</head>
+
+  
+
+<body style="font-family: 'Ubuntu Mono', monospace;" class="yscroll">
+
+    <h3 style="text-align: left; position: fixed; background-color: white; margin-left: 5vw;"><span style="color: coral">PLOT LOG FOR: </span>uniqueidhere <br /><span style="color: coral">PLOTTED ON: </span>@DateTime.Now</h3>
+
+    <div class="ct-chart" id="chart2" style="width: 300vw; height: 90vh; color: black; margin-top: -5vh;"></div>
+
+    <script>
+
+            var plate = ('@Model.plate').split(",");
+            var tube = ('@Model.tube').split(",");
+            var diskTop = ('@Model.diskTop').split(",");
+            var diskBottom = ('@Model.diskBottom').split(",");
+            var fluidTemp = ('@Model.fluidTemp').split(",");
+            var piezoCurrent = ('@Model.piezoCurrent').split(",");
+            var axisX = ('@Model.axisX').split(",");
+
+            var data = {
+                labels: axisX,
+                series: [plate, tube, diskTop, diskBottom, fluidTemp, piezoCurrent]
+            }
+
+            var options = {
+                showPoint: false,
+                showArea: true,
+                fullWidth: true
+            }
+
+            new Chartist.Line('#chart2', data, options);
+
+    </script>
+
+</body>
+
+</html>

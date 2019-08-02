@@ -19,7 +19,7 @@ namespace Portal.Models.Logic
 
         public modelPackage updatePage(int num)
         {
-            modelPackage retPckg = new modelPackage() { dataresults = _context.returnAllResults(num) };
+            modelPackage retPckg = new modelPackage() { dataresults = _context.allResultsNewSort(num) };
 
             return retPckg;
         }
@@ -28,8 +28,6 @@ namespace Portal.Models.Logic
         {
             modelInstruments[] instrumentsArray = _context.returnAllInstruments().Where(x => x.status.Equals("IDLE")).ToArray();
             globalData.connectedInstruments = instrumentsArray.Length;
-
-            //BackgroundJob.Schedule(() => updateConnections(), TimeSpan.FromMilliseconds(1000));
         }
 
     }

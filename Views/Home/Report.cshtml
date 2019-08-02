@@ -1,0 +1,143 @@
+﻿@model  Portal.Models.modelPackage
+@using Portal.Models
+
+<html style="overflow-y: scroll;" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>@Model.singularResult.uniqueID</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+    <link href="~/css/Animate.css" rel="stylesheet" />
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    <script href="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/assets/pace.min.js"></script>
+    <link href="~/assets/pace2.css" rel="stylesheet" />
+    <script src="~/assets/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="~/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/css/styles.css">
+</head>
+
+<body style="font-family: 'Ubuntu Mono', monospace;" onload="showJSON()">
+
+
+    <!-- Header -->
+    <div class="row">
+
+        <div class="col" style="text-align: center;">
+            <h2>Report: <span style="color: cornflowerblue">#@Model.singularResult.uniqueID</span></h2>
+        </div>
+
+    </div>
+
+    <hr />
+
+    <div class="row" style="margin-top: 10vh; margin-left: auto; margin-right: auto; text-align: center;">
+
+        <div class="col">
+            <div class="col">
+                <h3>CQ VALUES</h3>
+            </div>
+            <div class="col">
+                <div class="ct-chart" id="chart1" style="width: 40vw; color: black; font-size: 15pt; height: 35vh;"></div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="col">
+                <h3>OUTCOMES</h3>
+            </div>
+            <div class="col">
+                <p>(1)=Invalid &nbsp; (2)=Negative &nbsp; (3)=Positive<br />(4)=Pass &nbsp; (5)=Fail</p>
+            </div>
+            <div class="col" style="margin-top: 5vh; color: red; font-weight: bolder;">
+                @foreach (modelStats stat in Model.stats)
+                {
+                    <p>@stat.species : @stat.result</p>
+                }
+            </div>
+        </div>
+
+        <script>
+
+            var cq = ('@Model.cqList').split(",");
+            var wellno = ('@Model.wellnoList').split(",");
+
+            var data = {
+              labels: wellno,
+              series: [cq]
+            };
+
+            var options = {
+              high: 100,
+              low: 0
+            };
+
+            new Chartist.Bar('#chart1', data, options);
+
+        </script>
+
+    </div>
+
+    <div class="row center-block" style="margin-bottom: 10vh; margin-top: 5vh; text-align: center; margin-left: auto; margin-right: auto;">
+
+        <div class="col">
+            <h3>PLOTTED RUN LOG</h3>
+        </div>
+        <div class="col">
+            <div class="ct-chart" id="chart2" style="width: 90vw; height: 70vh;"></div>
+        </div>
+
+        <script>
+
+            var plate = ('@Model.graph.plate').split(",");
+            var tube = ('@Model.graph.tube').split(",");
+            var diskTop = ('@Model.graph.diskTop').split(",");
+            var diskBottom = ('@Model.graph.diskBottom').split(",");
+            var fluidTemp = ('@Model.graph.fluidTemp').split(",");
+            var piezoCurrent = ('@Model.graph.piezoCurrent').split(",");
+            var ledCurrent = ('@Model.graph.ledCurrent').split(",");
+            var axisX = ('@Model.graph.axisX').split(",");
+
+            var data = {
+                series: [plate, tube, diskTop, diskBottom, fluidTemp, piezoCurrent, ledCurrent]
+            }
+
+            var options = {
+                showPoint: false,
+                showArea: true,
+                fullWidth: false
+            }
+
+            new Chartist.Line('#chart2', data, options);
+
+        </script>
+
+    </div>
+
+    <hr />
+
+    <div class="row" style="height: 8vh;">
+
+        <div class="col" style="text-align: center; margin-top: 10vh; margin-bottom: auto;">
+            Copyright &copy; Tangen Biosciences 2019
+            <br />Development Release 0.2.4
+        </div>
+
+    </div>
+
+
+</body>
+
+
+
+</html>

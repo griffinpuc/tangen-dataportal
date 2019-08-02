@@ -10,7 +10,7 @@ namespace Portal.Models
     {
         [JsonIgnore]
         public int Id { get; set; }
-        public string wellId { get; set; }
+        public string wId { get; set; }
         public string Species { get; set; }
         public string Cq { get; set; }
         [JsonIgnore]

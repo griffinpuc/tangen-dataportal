@@ -1,45 +1,72 @@
 ﻿@model Portal.Models.modelPackage;
 @using Portal.Models;
 
-<script src="~/assets/js/jquery.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-<script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
-<link href="~/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-<link href="~/css/Animate.css" rel="stylesheet" />
-<link href="~/assets/css/popup.css" rel="stylesheet" />
+<script src="~/assets/pace.min.js"></script>
+<link href="~/assets/pace.css" rel="stylesheet" />
 
 <script>
 
-    function AddTag(elem) {
-    var tagID = $(elem).data('assigned-tag');
-    var dataresultID = $(elem).data('assigned-result');
-    $.ajax({
-        url: '@Url.Action("AddTag", "Home")',
-        data: { tagID, dataresultID },
-        success: function (data) {
-            $('#partialview_tags-' + pckg.singularResult.uniqueid).html(data);
-        }
-    });
-    }
+            function downloadSelected() {
 
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
+                var idArray = new Array();
+
+                $('input[type="checkbox"]:checked').each(function () {
+                    idArray.push($(this).val());
+                });
+
+                if (idArray.length > 0) {
+                    var input = idArray.join();
+                    window.location = '@Url.Action("batchDownloadHandler", "Home")?input=' + input;
+                }
+
+            }
+
+            function downloadAll() {
+
+                var idArray = new Array();
+                var elements = document.getElementsByName("checkbox");
+
+                for (var i = 0, element; element = elements[i++];) {
+                    idArray.push(element.value);
+                }
+
+                var input = idArray.join();
+                window.location = '@Url.Action("batchDownloadHandler", "Home")?input=' + input;
+            }
 
 </script>
 
-<div class="row" style="margin-top: -2vh; margin-left: 0vw;">
-    <p>Loaded <span style="color: #007bff; font-weight: bolder;"> @Model.dataresults.Count() </span> results</p>
+<div class="row animated pulse" style="margin-top: -2vh; margin-bottom: 1vh; margin-left: 0vw;">
+    <p>Loaded <span style="color: #007bff; font-weight: bolder;"> @Model.total </span> results of <span style="color: #007bff; font-weight: bolder;"> @Model.count </span></p>
+</div>
+
+<div class="row" style="margin-bottom: 5vh;">
+    <div class="dropdown" style="margin-left: 1vw;">
+        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Download...
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" onclick="downloadAll()">Download all loaded</a>
+            <a class="dropdown-item" onclick="downloadSelected()">Download all selected</a>
+        </div>
+    </div>
 </div>
 
 <div role="tablist" id="accordion-1">
     @foreach (modelDataResult result in Model.dataresults)
     {
-        <div class="row">
-            <div class="col-xs">
+
+        <div class="row animated fadeInUp">
+
+            <div class="col-xs-1" style="margin-top: 4vh; margin-left: -1vw">
+                @{
+                    string checkboxId = @Convert.ToString(result.ID);
+                }
+                <label class="checkbox-inline"><input name="checkbox" value="@checkboxId" id="checkbox" type="checkbox"></label>
             </div>
+
             <div class="col">
-                <div class="card animated fadeInUp" style="border-left: 1.0vh solid #01307E; margin-bottom: 1vh; z-index: 1; position: relative;" onload="UpdateTags(@result)">
+                <div class="card animated fadeInUp" id="card" style="border-left: 1.0vh solid #01307E; margin-bottom: 1vh; z-index: 1; position: relative;" onload="UpdateTags(@result)">
                     <div class="card-header" role="tab">
 
                         <div class="row" style="margin-left: 0.0vw;">
@@ -83,13 +110,13 @@
 
                                     <div class="dropdown-menu" style="z-index: 1; position:relative;">
                                         <!-- Dropdown menu links -->
-                                        @foreach (modelTag tag in Model.tags)
-                                        {
-                                            int tagID = tag.ID;
-                                            int resultID = result.ID;
+                                        @*@foreach (modelTag tag in Model.tags)
+                                            {
+                                                int tagID = tag.ID;
+                                                int resultID = result.ID;
 
-                                            <button id="button1" type="button" class="btn-primary dropdown-item" onclick="AddTag(this)" data-assigned-tag="@tagID" data-assigned-result="@resultID"><i class="fas fa-circle fa-xs" style="color: @tag.color"></i> @tag.name</button>
-                                        }
+                                                <button id="button1" type="button" class="btn-primary dropdown-item" onclick="AddTag(this)" data-assigned-tag="@tagID" data-assigned-result="@resultID"><i class="fas fa-circle fa-xs" style="color: @tag.color"></i> @tag.name</button>
+                                            }*@
                                     </div>
 
                                 </div>
@@ -100,17 +127,16 @@
                         <div class="card-body">
                             <div class="row" style="/*text-align: center;*//*display: block;*/">
                                 <div class="col-xl-5" style="margin: auto;">
-                                    <p><span style="color: slategrey; font-size: 13pt;">UUID:</span> @result.instrumentUUID</p>
                                     <p><span style="color: slategrey; font-size: 13pt;">KIT LOT ID:</span> @result.kitLotID</p>
                                     <p><span style="color: slategrey; font-size: 13pt;">INSTRUMENT NAME:</span> @result.instrumentName</p>
                                 </div>
                                 <div class="col-xl-5" style="margin: auto;">
                                     <div class="row" style="margin-left: 15vw;">
                                         <div class="col">
+                                            <!-- Dropdown 2 -->
                                             <div class="dropdown" style="/*margin: auto;*/margin-bottom: 2vh;">
                                                 <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button">Download</button>
                                                 <div class="dropdown-menu" role="menu">
-
                                                     @using (Html.BeginForm("DownloadHandlerResult", "Home", result))
                                                     {
                                                         <form method="POST">
@@ -123,13 +149,25 @@
                                                             <button class="dropdown-item btn-link" role="presentation" type="submit">Raw Data</button>
                                                         </form>
                                                     }
+                                                    @using (Html.BeginForm("DownloadHandlerCSV", "Home", result))
+                                                    {
+                                                        <form method="POST">
+                                                            <button class="dropdown-item btn-link" role="presentation" type="submit">CSV Formatted</button>
+                                                        </form>
+                                                    }
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row" style="margin-left: 15vw;">
-                                        <div class="col">
-                                            <a class="btn btn-warning" role="presentation" type="submit" href="@Url.Action("ViewResults", "Home", result)" target="_blank">View Results</a>
+                                        <div class="col" style="margin-left: 1vw;">
+                                            <div class="row">
+                                                <a class="btn btn-warning" role="presentation" type="submit" href="@Url.Action("Report", "Home", result)" target="_blank">Report</a>
+                                            </div>
+                                            <div class="row">
+                                                <a class="btn btn-warning" role="presentation" style="margin-top: 2vh;" type="submit" href="@Url.Action("showGraph", "Home", result)" target="_blank">Plot LOG</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +176,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
     }

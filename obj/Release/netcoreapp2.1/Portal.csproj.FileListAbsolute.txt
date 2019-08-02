@@ -30,3 +30,5 @@ C:\Users\griff\Documents\Tangen\TangenDataPortal\Portal\Portal\obj\Release\netco
 C:\Users\griff\Documents\Tangen\TangenDataPortal\Portal\Portal\obj\Release\netcoreapp2.1\Portal.pdb
 C:\Users\griff\Documents\Tangen\TangenDataPortal\Portal\Portal\obj\Release\netcoreapp2.1\Portal.csproj.CopyComplete
 C:\Users\griff\Documents\Tangen\TangenDataPortal\Portal\Portal\obj\Release\netcoreapp2.1\Portal.csprojAssemblyReference.cache
+C:\Users\griff\Documents\Tangen\TangenDataPortal\Portal\Portal\obj\Release\netcoreapp2.1\Razor\Views\Home\DatabaseView.g.cshtml.cs
+C:\Users\griff\Documents\Tangen\TangenDataPortal\Portal\Portal\obj\Release\netcoreapp2.1\Razor\Views\Home\_PartialDBManage.g.cshtml.cs
